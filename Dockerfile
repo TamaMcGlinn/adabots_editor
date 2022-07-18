@@ -21,3 +21,13 @@ ENV PRJ_TARGET "UNIX"
 ENV TARGET "x86_64-linux-gnu"
 ENV XMLADA_ALIRE_PREFIX "/adabots_examples/alire/cache/dependencies/xmlada_21.0.0_836d1890"
 
+# Nvim configuration
+COPY /vimrc/abe_plugins.vim /vimrc/
+RUN echo '\n" ABE plugins\nsource /vimrc/abe_plugins.vim' >> /vimrc/plugins.vim
+RUN nvim -u '/vimrc/plug_framework.vim' -c 'PlugInstall' -c 'qall!'
+COPY /vimrc/ /vimrc/
+RUN echo '\n" ABE config\nsource /vimrc/abe_config.vim' >> /vimrc/vimrc.vim
+
+# Ada snippets
+COPY /snippets/ada.snippets /snippets/
+RUN cat /snippets/ada.snippets >> /root/.vim/plugged/vim-snippets/UltiSnips/ada.snippets

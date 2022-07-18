@@ -1,0 +1,11 @@
+
+snippet program "AdaBots program" b
+with Adabots;
+
+procedure `!v vim_snippets#Filename()` is
+   bot : constant Adabots.Turtle := Adabots.Create_Turtle;
+begin
+   bot.Turn_Left;
+   bot.Turn_Right;
+end `!v vim_snippets#Filename()`;
+endsnippet
