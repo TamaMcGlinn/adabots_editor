@@ -1,0 +1,3 @@
+[submodule "AdaBots_examples"]
+	path = AdaBots_examples
+	url = https://github.com/TamaMcGlinn/AdaBots_examples
