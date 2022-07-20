@@ -17,6 +17,7 @@ endfunction
 
 function! AbeNewFile() abort
   let l:filename = quickui#input#open('Filename:', 'example.adb')
+  " TODO handle empty filename
   if !(l:filename =~? '^[^\.]*\.ad[bs]$')
     " remove all extensions (if any)
     let l:filename = substitute(l:filename, '\..*$', '', '')
@@ -36,16 +37,22 @@ function! AbeOpen() abort
   call AbeSave()
   execute "stopinsert"
   " execute "e " . g:abe_root_dir
-  let l:files = systemlist("ls /adabots_examples/src/*.ad[sb]")
-	call map(l:files, 'substitute(v:val, "/adabots_examples/", "", "")')
-  let l:contents = map(copy(files), '[v:val, "e " . v:val]')
+  let l:files = systemlist("ls /adabots_examples/src/*.ad[sb] 2>/dev/null")
+  if len(l:files) == 0
+    call AbeNewFile()
+    return
+  endif
+	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
+  let l:contents = map(copy(files), '[v:val, "e /adabots_examples/src/" . v:val]')
 	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
   let l:opts = {}
   call quickui#listbox#open(l:contents, l:opts)
 endfunction
 
 function! AbeSave() abort
-  execute "w"
+  if expand('%') =~? '\.ad[sb]$'
+    execute "w"
+  endif
 endfunction
 
 function! AbeQuit() abort

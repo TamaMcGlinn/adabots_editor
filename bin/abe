@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+if [ $# -eq 0 ]; then
+  ARGS=("-c" "AbeNoArgStart")
+else
+  ARGS=("src/$1")
+fi
 docker run -it \
   -v "$(pwd):/adabots_examples/src" \
   -v "$(pwd)/bin:/adabots_examples/bin" \
   --workdir=/adabots_examples \
-  tmcglinn/abe:latest nvim "src/$1"
+  tmcglinn/abe:latest nvim ${ARGS[@]}

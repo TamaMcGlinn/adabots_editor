@@ -19,6 +19,11 @@ nnoremap <c-space> :call quickui#menu#open()<cr>
 source /vimrc/abe_insert_only.vim
 
 function! AbeBufEnter() abort
+  if &ft ==# "dirvish"
+    execute "enew"
+    call AbeOpen()
+    return
+  endif
   execute "w"
   if g:abe_insert_only
     execute "startinsert"
@@ -26,3 +31,19 @@ function! AbeBufEnter() abort
 endfunction
 
 au BufReadPost * call AbeBufEnter()
+
+function! AbeNoArgStart() abort
+  execute "enew"
+  call AbeOpen()
+  execute 'sleep 250m'
+  if !(expand('%') =~? '\.ad[sb]$')
+    " if we are not looking at an Ada source file,
+    " we must be looking at a menu, and it might not be visible
+    " due to some glitch. So we do j to refresh the screen
+    " if we do this for all cases, we end up actually inserting j
+    call nvim_feedkeys('j','m',v:true)
+  endif
+endfunction
+
+command! AbeNoArgStart call AbeNoArgStart()
+
