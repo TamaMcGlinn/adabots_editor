@@ -1,3 +1,19 @@
+function! AbeInsertDefaultProgram(filename) abort
+  " read template
+  execute 'r /abe_templates/program.adb'
+  " replace __FILENAME__ with filename
+  let l:procedure_name = substitute(a:filename, '\..*$', '', '')
+  execute '%s/__FILENAME__/'.l:procedure_name.'/g'
+  " delete first line
+  execute 'normal! ggdd'
+  " jump to end of line 6
+  execute 'normal! 6gg$'
+  if g:abe_insert_only
+    execute "startinsert"
+    call nvim_feedkeys(nvim_replace_termcodes('<Right>',v:true,v:false,v:true),'m',v:true)
+  endif
+  execute "w"
+endfunction
 
 function! AbeNewFile() abort
   let l:filename = quickui#input#open('Filename:', 'example.adb')
@@ -11,12 +27,7 @@ function! AbeNewFile() abort
   let l:file_exists=exists(l:full_path)
   execute "e " . l:full_path
   if !l:file_exists
-    " ensure insert mode
-    execute "startinsert"
-    call nvim_feedkeys(nvim_replace_termcodes('program<tab><cr>',v:true,v:false,v:true),'m',v:true)
-    if !g:abe_insert_only
-      execute "stopinsert"
-    endif
+    call AbeInsertDefaultProgram(l:filename)
     execute "w"
   endif
 endfunction
@@ -24,7 +35,13 @@ endfunction
 function! AbeOpen() abort
   call AbeSave()
   execute "stopinsert"
-  execute "e " . g:abe_root_dir
+  " execute "e " . g:abe_root_dir
+  let l:files = systemlist("ls /adabots_examples/src/*.ad[sb]")
+	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
+  let l:contents = map(copy(files), '[v:val, "e " . v:val]')
+	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
+  let l:opts = {}
+  call quickui#listbox#open(l:contents, l:opts)
 endfunction
 
 function! AbeSave() abort

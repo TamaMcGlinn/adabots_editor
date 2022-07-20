@@ -33,6 +33,9 @@ RUN cat /snippets/ada.snippets >> /root/.vim/plugged/vim-snippets/UltiSnips/ada.
 # Remove ctrl-space mapping from AVE
 RUN sed -i 's/.*cmp.mapping.complete/-- removed complete/' /root/.config/nvim/lua/custom_lspconfig.lua
 
+# ABE file templates
+COPY /templates/ /abe_templates/
+
 # Nvim configuration
 COPY /vimrc/ /vimrc/
 COPY /vimrc/ftplugin/ /root/.vim/ftplugin
