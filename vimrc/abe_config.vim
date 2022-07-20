@@ -30,7 +30,7 @@ function! AbeBufEnter() abort
   endif
 endfunction
 
-au BufReadPost * call AbeBufEnter()
+au BufEnter * call AbeBufEnter()
 
 function! AbeNoArgStart() abort
   execute "enew"
