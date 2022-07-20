@@ -8,7 +8,7 @@ function! AbeToggleBackground() abort
 endfunction
 
 call quickui#menu#install("&Options", [
-			\ ['%{g:abe_insert_only? "[X]":"[ ]"} Insert mode only', 'call AbeToggleInsertOnly()'],
-			\ ['%{&cursorline? "[X]":"[ ]"} Highlight cursor line', 'set cursorline!'],
-			\ ['%{&background == "dark"? "[X] Dark / [ ] Light":"[ ] Dark / [X] Light"}', 'call AbeToggleBackground()'],
+			\ ['%{g:abe_insert_only? "☑":"☐"} Beginner mode', 'call AbeToggleInsertOnly()'],
+			\ ['%{&cursorline? "☑":"☐"} Highlight cursor line', 'set cursorline!'],
+			\ ['%{&background == "dark"? "☑ Dark / ☐ Light":"☐ Dark / ☑ Light"}', 'call AbeToggleBackground()'],
 			\ ])

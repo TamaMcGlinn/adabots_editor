@@ -22,7 +22,7 @@ To use, open a terminal and run abe, optionally passing an existing program text
 abe yourprogram.adb
 ```
 
-Press space twice to open the top menu. Keybindings:
+Press Cntrl+m to open the top menu, which gives access to all of ABE's functionality. Keybindings:
 
 ```
 Cntrl+b   Compile file

@@ -11,22 +11,27 @@ function! AbeToggleInsertOnly() abort
 endfunction
 
 function! AbeEnableInsertModeMappings() abort
-  inoremap <space><space> <c-o>:call quickui#menu#open()<cr>
-  inoremap <c-n> <c-o>:call AbeNewFile()<CR>
-  inoremap <c-s> <c-o>:write<CR>
-  inoremap <c-q> <c-o>:call AbeQuit()<CR>
-  inoremap <c-b> <c-o>:call AbeCompile()<CR>
+  inoremap <silent> <c-space> <c-o>:call quickui#menu#open()<cr>
+  inoremap <silent> <c-n> <c-o>:call AbeNewFile()<cr>
+  inoremap <silent> <c-o> <c-o>:call AbeOpen()<cr>
+  inoremap <silent> <c-s> <c-o>:call AbeSave()<cr>
+  inoremap <silent> <c-q> <c-o>:call AbeQuit()<cr>
+  inoremap <silent> <c-b> <c-o>:call AbeCompile()<cr>
   inoremap <ESC> <NOP>
+  inoremap <c-c> <NOP>
+  inoremap <c-v> <NOP>
 endfunction
 
 function! AbeDisableInsertModeMappings() abort
-  " leave just the double-space menu defined
-  " iunmap <space><space>
+  " only cntrl-space for menu is left in insert mode
+  " iunmap <c-space>
   iunmap <c-n>
   iunmap <c-s>
   iunmap <c-q>
   iunmap <c-b>
   iunmap <ESC>
+  iunmap <c-c>
+  iunmap <c-v>
 endfunction
 
 call AbeEnableInsertModeMappings()
