@@ -37,7 +37,7 @@ function! AbeOpen() abort
   execute "stopinsert"
   " execute "e " . g:abe_root_dir
   let l:files = systemlist("ls /adabots_examples/src/*.ad[sb]")
-	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
+	call map(l:files, 'substitute(v:val, "/adabots_examples/", "", "")')
   let l:contents = map(copy(files), '[v:val, "e " . v:val]')
 	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
   let l:opts = {}
