@@ -1,6 +1,12 @@
 
 function! AbeNewFile() abort
   let l:filename = quickui#input#open('Filename:', 'example.adb')
+  if !(l:filename =~? '^[^\.]*\.ad[bs]$')
+    " remove all extensions (if any)
+    let l:filename = substitute(l:filename, '\..*$', '', '')
+    " add .adb
+    let l:filename = substitute(l:filename, '$', '.adb', '')
+  endif
   let l:full_path = g:abe_root_dir . l:filename
   let l:file_exists=exists(l:full_path)
   execute "e " . l:full_path
