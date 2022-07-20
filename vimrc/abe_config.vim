@@ -19,13 +19,10 @@ nnoremap <c-space> :call quickui#menu#open()<cr>
 source /vimrc/abe_insert_only.vim
 
 function! AbeBufEnter() abort
-  if &ft !=# "dirvish"
-    execute "w"
-    if g:abe_insert_only
-      execute "startinsert"
-    endif
+  execute "w"
+  if g:abe_insert_only
+    execute "startinsert"
   endif
 endfunction
 
 au BufReadPost * call AbeBufEnter()
-au BufReadPost dirvish source /root/.vim/ftplugin/dirvish.vim

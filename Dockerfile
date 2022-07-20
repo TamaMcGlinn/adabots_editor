@@ -38,5 +38,4 @@ COPY /templates/ /abe_templates/
 
 # Nvim configuration
 COPY /vimrc/ /vimrc/
-COPY /vimrc/ftplugin/ /root/.vim/ftplugin
 RUN echo '\n" ABE config\nsource /vimrc/abe_config.vim' >> /vimrc/vimrc.vim

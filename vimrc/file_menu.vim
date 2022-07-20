@@ -45,9 +45,7 @@ function! AbeOpen() abort
 endfunction
 
 function! AbeSave() abort
-  if &ft !=# "dirvish"
-    execute "w"
-  endif
+  execute "w"
 endfunction
 
 function! AbeQuit() abort

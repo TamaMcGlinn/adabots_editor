@@ -1,9 +1,7 @@
 
 function! AbeCompile() abort
-  if &ft !=# "dirvish"
-    execute "w"
-    execute "!gprbuild -Xexecutables=%:t"
-  endif
+  execute "w"
+  execute "!gprbuild -Xexecutables=%:t"
 endfunction
 
 call quickui#menu#install('&Compiler', [
