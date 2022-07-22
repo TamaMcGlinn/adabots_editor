@@ -35,8 +35,8 @@ endfunction
 
 function! AbeOpen() abort
   call AbeSave()
-  execute "stopinsert"
-  " execute "e " . g:abe_root_dir
+  " in case we are in beginner mode, we want insert mode off for the menu
+  " execute "stopinsert"
   let l:files = systemlist("ls /adabots_examples/src/*.ad[sb] 2>/dev/null")
   if len(l:files) == 0
     call AbeNewFile()
@@ -56,7 +56,10 @@ function! AbeSave() abort
 endfunction
 
 function! AbeQuit() abort
-  execute "wqall"
+  if !(expand('%') ==# '')
+    execute "w"
+  endif
+  execute "qall!"
 endfunction
 
 call quickui#menu#install('&File', [

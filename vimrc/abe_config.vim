@@ -19,12 +19,6 @@ nnoremap <c-space> :call quickui#menu#open()<cr>
 source /vimrc/abe_insert_only.vim
 
 function! AbeBufEnter() abort
-  if &ft ==# "dirvish"
-    execute "enew"
-    call AbeOpen()
-    return
-  endif
-  execute "w"
   if g:abe_insert_only
     execute "startinsert"
   endif
