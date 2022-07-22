@@ -16,8 +16,12 @@ function! AbeInsertDefaultProgram(filename) abort
 endfunction
 
 function! AbeNewFile() abort
-  let l:filename = quickui#input#open('Filename:', 'example.adb')
-  " TODO handle empty filename
+  let l:filename = ''
+  while l:filename =~# '^ *$'
+    let l:filename = quickui#input#open('Filename:', 'example.adb')
+  endwhile
+  let l:filename = substitute(l:filename, '^ *', '', '')
+  let l:filename = substitute(l:filename, ' ', '_', 'g')
   if !(l:filename =~? '^[^\.]*\.ad[bs]$')
     " remove all extensions (if any)
     let l:filename = substitute(l:filename, '\..*$', '', '')
