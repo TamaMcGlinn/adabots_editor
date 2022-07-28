@@ -1,6 +1,10 @@
 # AdaBots Editor
 
 ABE is a ready-to-use editor inside a docker image, preconfigured for writing AdaBots programs.
+I have bundled Adabots, Alire, gprbuild and built all of it already inside the docker image,
+which brings the setup instructions down to a single download, and build-times down from over 10 minutes to a few seconds.
+
+![screenshots of ABE overload with text](/demo.png)
 
 # Setup
 
@@ -22,7 +26,7 @@ To use, open a terminal and run abe, optionally passing an existing program text
 abe yourprogram.adb
 ```
 
-Press Cntrl+m to open the top menu, which gives access to all of ABE's functionality. Keybindings:
+Press Cntrl+space to open the top menu, which gives access to all of ABE's functionality. Keybindings:
 
 ```
 Cntrl+b   Compile file
