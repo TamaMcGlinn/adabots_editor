@@ -28,15 +28,8 @@ au BufEnter * call AbeBufEnter()
 
 function! AbeNoArgStart() abort
   execute "enew"
+  execute 'sleep 50m'
   call AbeOpen()
-  execute 'sleep 250m'
-  if !(expand('%') =~? '\.ad[sb]$')
-    " if we are not looking at an Ada source file,
-    " we must be looking at a menu, and it might not be visible
-    " due to some glitch. So we do j to refresh the screen
-    " if we do this for all cases, we end up actually inserting j
-    call nvim_feedkeys('j','m',v:true)
-  endif
 endfunction
 
 command! AbeNoArgStart call AbeNoArgStart()

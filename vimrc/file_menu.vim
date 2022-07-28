@@ -46,6 +46,7 @@ function! AbeOpen() abort
     call AbeNewFile()
     return
   endif
+  " create menu with each .adb file
 	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
   let l:contents = map(copy(files), '[v:val, "e /adabots_examples/src/" . v:val]')
 	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
