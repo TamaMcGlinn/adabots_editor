@@ -7,6 +7,7 @@ source /vimrc/visuals.vim
 source /vimrc/file_menu.vim
 source /vimrc/compile_menu.vim
 source /vimrc/options_menu.vim
+source /vimrc/help_menu.vim
 source /vimrc/normal_mappings.vim
 source /vimrc/copy_paste.vim
 

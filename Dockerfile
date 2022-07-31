@@ -39,3 +39,6 @@ COPY /templates/ /abe_templates/
 # Nvim configuration
 COPY /vimrc/ /vimrc/
 RUN echo '\n" ABE config\nsource /vimrc/abe_config.vim' >> /vimrc/vimrc.vim
+
+# Copy version info file
+COPY version /
