@@ -48,7 +48,10 @@ function! AbeOpen() abort
   endif
   " create menu with each .adb file
 	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
+	# replace each item (which is just a file name) with
+	# a list of: filename (shown in the UI), nvim instruction to open the file (needs full path)
   let l:contents = map(copy(files), '[v:val, "e /adabots_examples/src/" . v:val]')
+  # Add a non-file entry to start a new program
 	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
   let l:opts = {}
   call quickui#listbox#open(l:contents, l:opts)
