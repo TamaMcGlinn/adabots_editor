@@ -1,24 +1,60 @@
-function! AbeInsertDefaultProgram(filename) abort
+ function! AbeInsertDefaultContents(filename, template_filename) abort
   " read template
-  execute 'r /abe_templates/program.adb'
-  " replace __FILENAME__ with filename
+  execute 'r /abe_templates/' . a:template_filename
+  " procedure name is filename minus extension
   let l:procedure_name = substitute(a:filename, '\..*$', '', '')
+  " replace __FILENAME__ with procedure name
   execute '%s/__FILENAME__/'.l:procedure_name.'/g'
   " delete first line
   execute 'normal! ggdd'
-  " jump to end of line 6
-  execute 'normal! 6gg$'
+  " jump to start marker
+  call search('__START__')
   if g:abe_insert_only
-    execute "startinsert"
+    execute 'normal! C'
     call nvim_feedkeys(nvim_replace_termcodes('<Right>',v:true,v:false,v:true),'m',v:true)
+  else
+    execute 'normal! D'
   endif
-  execute "w"
 endfunction
 
 function! AbeNewFile() abort
+  let l:new_file_options = [
+        \['[New program]', 'call AbeNewProgram()'],
+        \['[New package]', 'call AbeNewPackage()'],
+    \]
+  let l:opts = {}
+  call quickui#listbox#open(l:new_file_options, l:opts)
+endfunction
+
+function! AbeNewProgram() abort
+  let l:filename = GetFileName("example.adb", ".adb")
+  let l:full_path = GetFullPath(l:filename)
+  call AbeCreateFileFromTemplate(l:filename, l:full_path, "program.adb")
+endfunction
+
+function! AbeNewPackage() abort
+  let l:filename = GetFileName("example_package.ads", ".ads")
+  let l:body_file = substitute(l:filename, '.ads$', '.adb', '')
+  let l:body_fullpath = GetFullPath(l:body_file)
+  call AbeCreateFileFromTemplate(l:body_file, l:body_fullpath, "package.adb")
+  execute "w"
+  let l:full_path = GetFullPath(l:filename)
+  call AbeCreateFileFromTemplate(l:filename, l:full_path, "package.ads")
+endfunction
+
+function! AbeCreateFileFromTemplate(filename, full_path, template_filename) abort
+  let l:file_exists=exists(a:full_path)
+  execute "e " . a:full_path
+  " if it didn't already exist before, insert default contents and save
+  if !l:file_exists
+    call AbeInsertDefaultContents(a:filename, a:template_filename)
+  endif
+endfunction
+
+function! GetFileName(default_filename, extension) abort
   let l:filename = ''
   while l:filename =~# '^ *$'
-    let l:filename = quickui#input#open('Filename:', 'example.adb')
+    let l:filename = quickui#input#open('Filename:', a:default_filename)
   endwhile
   let l:filename = substitute(l:filename, '^ *', '', '')
   let l:filename = substitute(l:filename, ' ', '_', 'g')
@@ -26,15 +62,13 @@ function! AbeNewFile() abort
     " remove all extensions (if any)
     let l:filename = substitute(l:filename, '\..*$', '', '')
     " add .adb
-    let l:filename = substitute(l:filename, '$', '.adb', '')
+    let l:filename = substitute(l:filename, '$', a:extension, '')
   endif
-  let l:full_path = g:abe_root_dir . l:filename
-  let l:file_exists=exists(l:full_path)
-  execute "e " . l:full_path
-  if !l:file_exists
-    call AbeInsertDefaultProgram(l:filename)
-    execute "w"
-  endif
+  return l:filename
+endfunction
+
+function! GetFullPath(source_file) abort
+  return g:abe_root_dir . a:source_file
 endfunction
 
 function! AbeOpen() abort
@@ -47,12 +81,12 @@ function! AbeOpen() abort
     return
   endif
   " create menu with each .adb file
-	call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
-	# replace each item (which is just a file name) with
-	# a list of: filename (shown in the UI), nvim instruction to open the file (needs full path)
+  call map(l:files, 'substitute(v:val, "/adabots_examples/src/", "", "")')
+  " replace each item (which is just a file name) with
+  " a list of: filename (shown in the UI), nvim instruction to open the file (needs full path)
   let l:contents = map(copy(files), '[v:val, "e /adabots_examples/src/" . v:val]')
-  # Add a non-file entry to start a new program
-	call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
+  " Add a non-file entry to start a new program
+  call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
   let l:opts = {}
   call quickui#listbox#open(l:contents, l:opts)
 endfunction
@@ -64,7 +98,7 @@ function! AbeSave() abort
 endfunction
 
 function! AbeQuit() abort
-  if !(expand('%') ==# '')
+  if !(&buftype ==# 'nofile' || expand('%') ==# '')
     execute "w"
   endif
   execute "qall!"
