@@ -43,7 +43,7 @@ function! AbeNewPackage() abort
 endfunction
 
 function! AbeCreateFileFromTemplate(filename, full_path, template_filename) abort
-  let l:file_exists=exists(a:full_path)
+  let l:file_exists=!empty(glob(a:full_path))
   execute "e " . a:full_path
   " if it didn't already exist before, insert default contents and save
   if !l:file_exists
