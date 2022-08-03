@@ -86,7 +86,8 @@ function! AbeOpen() abort
   " a list of: filename (shown in the UI), nvim instruction to open the file (needs full path)
   let l:contents = map(copy(files), '[v:val, "e /adabots_examples/src/" . v:val]')
   " Add a non-file entry to start a new program
-  call insert(l:contents, ['[New file]', 'call AbeNewFile()'], len(l:contents))
+  call insert(l:contents, ['  [New program]  ', 'call AbeNewProgram()'], len(l:contents))
+  call insert(l:contents, ['  [New package]  ', 'call AbeNewPackage()'], len(l:contents))
   let l:opts = {}
   call quickui#listbox#open(l:contents, l:opts)
 endfunction
